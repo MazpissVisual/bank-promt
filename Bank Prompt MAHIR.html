@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bank Prompt MAHIR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);--paper:#FBFCFF;--rule:#D6E4F5;--margin:#E06A6A;--ink:#1F2A5C;--soft:#56618F;--mark:#FFE873;--ok:#1E8A55;--card:#FFF;--line:#C9D4EA;--head:'Bricolage Grotesque',system-ui,sans-serif;--body:'Atkinson Hyperlegible',system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#141A33;--rule:#222B4D;--margin:#FF8E7A;--ink:#E6EAFA;--soft:#A3ADD6;--mark:#7A6A16;--ok:#5FD39A;--card:#1B2244;--line:#333E6B}}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);background-image:linear-gradient(var(--rule) 1px,transparent 1px);background-size:100% 32px}
+.page{max-width:1040px;margin:auto;padding:40px 20px 80px;position:relative}
+@media(min-width:720px){.page{padding-left:88px}.page::before{content:"";position:absolute;inset:0 auto 0 56px;width:2px;background:var(--margin);opacity:.6}}
+.site-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.site-nav a{font:700 .9rem var(--body);color:var(--ink);text-decoration:none;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px}.site-nav a[aria-current="page"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+h1{font:800 clamp(2.2rem,6vw,3.7rem)/1.02 var(--head);letter-spacing:-.03em;margin:0 0 12px}header>p{max-width:65ch;color:var(--soft);margin:0 0 24px}
+.toolbar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--line);padding:10px 0 12px;margin-bottom:24px;display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:10px}
+.search{width:100%;font:1rem var(--body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:9px;padding:10px 13px}.count{align-self:center;color:var(--soft);font-size:.9rem;white-space:nowrap}
+.filters{grid-column:1/-1;display:flex;gap:7px;overflow:auto;padding-bottom:2px}.filter{white-space:nowrap;background:var(--card);color:var(--ink);border:1.5px solid var(--line);border-radius:999px;padding:6px 12px;font:700 .86rem var(--body);cursor:pointer}.filter.active{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.card{background:var(--card);border:1.5px solid var(--line);border-radius:11px;padding:19px;display:flex;flex-direction:column;min-width:0}.card[hidden]{display:none}.top{display:flex;justify-content:space-between;gap:12px;align-items:start}.tag{color:var(--margin);font:800 .78rem var(--head);letter-spacing:.07em;text-transform:uppercase}.card h2{font:800 1.25rem/1.2 var(--head);margin:5px 0 7px}.desc{color:var(--soft);font-size:.93rem;margin:0 0 14px}.prompt{white-space:pre-wrap;margin:0;background:var(--paper);border-left:3px solid var(--margin);border-radius:4px;padding:11px 13px;font:.94rem/1.55 var(--body);max-height:13rem;overflow:auto}.actions{display:flex;gap:9px;align-items:center;margin-top:auto;padding-top:14px}.copy{font:700 .9rem var(--body);border:1.5px solid var(--ink);border-radius:8px;padding:8px 13px;cursor:pointer;background:var(--ink);color:var(--paper)}.copy.done{background:var(--ok);border-color:var(--ok)}.hint{font-size:.8rem;color:var(--soft)}
+.empty{display:none;text-align:center;background:var(--card);border:1.5px dashed var(--line);border-radius:10px;padding:32px;color:var(--soft)}.empty.show{display:block}.tip{background:var(--mark);color:var(--ink);border-radius:6px;padding:12px 15px;margin:28px 0}.tip b{font-family:var(--head)}footer{color:var(--soft);font-size:.9rem;border-top:2px solid var(--line);padding-top:16px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--margin);outline-offset:2px}@media(max-width:720px){.grid{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.count{display:none}.prompt{max-height:15rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+<nav class="site-nav" aria-label="Navigasi utama"><a href="Lembar%20Kerja%20Prompt%20MAHIR.html">Lembar latihan</a><a href="Bank%20Prompt%20MAHIR.html" aria-current="page">Bank prompt</a></nav>
+<header><h1>Bank Prompt MAHIR</h1><p>Pilih prompt sesuai kebutuhan, salin, lalu ganti bagian dalam tanda <b>[kurung siku]</b> dengan kondisi kelas Anda. Prompt ini adalah titik awal—guru tetap meninjau hasil akhirnya.</p></header>
+<section class="toolbar" aria-label="Cari dan saring prompt"><input class="search" id="search" type="search" placeholder="Cari: tujuan, asesmen, diferensiasi…" autocomplete="off"><span class="count" id="count"></span><div class="filters" id="filters"></div></section>
+<main><div class="grid" id="bank"></div><div class="empty" id="empty">Prompt yang dicari belum ada. Coba kata kunci atau kategori lain.</div></main>
+<p class="tip"><b>Tip MAHIR:</b> setelah menempelkan prompt ke AI, lengkapi konteks kelas dan selalu minta AI memeriksa kembali keselarasan tujuan, kegiatan, serta asesmen.</p>
+<footer>Gunakan AI sebagai asisten. Guru tetap menentukan tujuan, konteks, kelayakan, nilai, dan keputusan akhir pembelajaran.<br>Bank Prompt MAHIR · Havidz Muhammad Iqbal, S.Kom.</footer>
+</div>
+<script>
+const PROMPTS=[
+{cat:'Modul lengkap',title:'Menyusun modul ajar utuh',desc:'Menghasilkan rancangan lengkap yang tetap realistis untuk kondisi kelas.',text:`Anda berperan sebagai guru Bahasa Indonesia [jenjang] yang berpengalaman merancang pembelajaran.
+
+Saya mengajar kelas [kelas/fase] dengan [jumlah] peserta didik. Karakteristik kelas: [kemampuan, minat, atau kebutuhan belajar]. Materi: [materi]. Alokasi waktu: [waktu]. Sarana yang tersedia: [sarana].
+
+Susun rancangan modul ajar yang membantu peserta didik mencapai [tujuan utama]. Modul memuat tujuan pembelajaran, materi esensial, kegiatan pendahuluan–inti–penutup, diferensiasi, asesmen diagnostik–formatif–sumatif, remedial, pengayaan, dan refleksi.
+
+Gunakan aktivitas yang realistis sesuai waktu dan sarana. Hindari kegiatan yang membutuhkan fasilitas di luar kondisi kelas.
+
+Sebelum memberikan jawaban akhir, periksa kembali keselarasan tujuan, kegiatan, asesmen, waktu, dan karakteristik peserta didik.`},
+{cat:'Tujuan',title:'Merumuskan tujuan pembelajaran',desc:'Tujuan yang spesifik, terukur, dan dapat diamati.',text:`Anda berperan sebagai guru Bahasa Indonesia [jenjang] yang berpengalaman.
+
+Konteks kelas: [kelas/fase], [jumlah] peserta didik, materi [materi], alokasi [waktu], dengan karakteristik [karakteristik peserta didik].
+
+Susun maksimal 3–4 tujuan pembelajaran yang spesifik, terukur, dan dapat diamati. Setiap tujuan harus menunjukkan kemampuan yang dilakukan peserta didik, konteks materi, tingkat proses berpikir, dan hasil yang dapat diamati.
+
+Hindari tujuan yang terlalu umum seperti “memahami materi”. Pastikan tujuan dapat dicapai dalam alokasi waktu yang tersedia.`},
+{cat:'Kegiatan',title:'Merancang kegiatan pembelajaran',desc:'Alur pendahuluan, inti, dan penutup dengan pembagian waktu.',text:`Berperanlah sebagai guru Bahasa Indonesia yang akan mengajar kelas [kelas] dengan [jumlah] peserta didik. Materi: [materi]. Tujuan pembelajaran: [tujuan]. Alokasi waktu: [waktu]. Sarana: [sarana].
+
+Rancang kegiatan pendahuluan, inti, dan penutup yang berpusat pada peserta didik. Tulis langkah guru, aktivitas peserta didik, serta alokasi menit pada setiap tahap dalam tabel.
+
+Gunakan metode [metode/model jika ada]. Pastikan total waktu tidak melebihi [waktu], instruksi mudah dipahami, dan aktivitas tidak bergantung pada sarana yang tidak tersedia.
+
+Periksa kembali apakah setiap kegiatan berkontribusi langsung pada tujuan pembelajaran.`},
+{cat:'Diferensiasi',title:'Menyusun strategi diferensiasi',desc:'Diferensiasi konten, proses, produk, dan dukungan tanpa memberi label siswa.',text:`Anda berperan sebagai guru Bahasa Indonesia yang berpengalaman menerapkan pembelajaran berdiferensiasi.
+
+Saya mengajar kelas [kelas], [jumlah] peserta didik. Materi: [materi]. Kesiapan dan kebutuhan belajar mereka: [jelaskan keragaman kelas]. Alokasi waktu: [waktu].
+
+Susun strategi diferensiasi yang realistis berupa diferensiasi konten, proses, produk, serta scaffolding bagi peserta didik yang membutuhkan. Tampilkan dalam tabel: kebutuhan belajar, bentuk dukungan, aktivitas, dan bukti belajar.
+
+Jangan membedakan peserta didik dengan label “pintar” dan “lemah”. Fokus pada kebutuhan belajar dan tetap gunakan tujuan pembelajaran yang sama.`},
+{cat:'Asesmen',title:'Membuat asesmen diagnostik',desc:'Memetakan kesiapan awal sebelum pembelajaran dimulai.',text:`Anda berperan sebagai guru Bahasa Indonesia yang berpengalaman menyusun asesmen diagnostik.
+
+Untuk kelas [kelas/fase] dengan materi [materi] dan tujuan [tujuan], buat asesmen diagnostik singkat yang dapat selesai dalam maksimal [durasi] menit.
+
+Sertakan 5–8 pertanyaan/tugas, kunci atau indikator jawaban, cara membaca hasil, dan tindak lanjut untuk peserta didik yang perlu dukungan maupun tantangan tambahan. Gunakan format yang mudah dilaksanakan dengan [sarana].
+
+Pastikan asesmen hanya memetakan pengetahuan atau keterampilan prasyarat, bukan memberi nilai akhir.`},
+{cat:'Asesmen',title:'Membuat asesmen formatif',desc:'Cek pemahaman singkat berikut tindak lanjutnya.',text:`Bertindaklah sebagai guru Bahasa Indonesia kelas [kelas]. Materi: [materi]. Tujuan pembelajaran: [tujuan].
+
+Buat asesmen formatif singkat untuk mengecek kemajuan peserta didik pada pertengahan pembelajaran. Sertakan instruksi, 3–5 butir/tugas, indikator ketercapaian, contoh respons yang diharapkan, dan tindak lanjut berdasarkan hasil.
+
+Asesmen harus dapat dilakukan dalam [durasi] menit, menggunakan [sarana], dan memberi informasi yang bisa langsung dipakai guru untuk menyesuaikan pembelajaran.`},
+{cat:'Asesmen',title:'Asesmen sumatif dan rubrik',desc:'Tugas akhir lengkap dengan indikator serta rubrik skala 1–4.',text:`Anda berperan sebagai guru Bahasa Indonesia yang berpengalaman menyusun asesmen.
+
+Susun asesmen sumatif untuk tujuan berikut: [tempel tujuan pembelajaran]. Konteks kelas: [kelas/fase], materi [materi], alokasi [waktu].
+
+Buat tugas peserta didik, instruksi pengerjaan, indikator penilaian, rubrik analitik skala 1–4, dan kriteria keberhasilan. Sajikan rubrik dalam tabel dengan deskripsi yang spesifik dan dapat diamati pada setiap tingkat.
+
+Periksa kembali apakah seluruh kriteria hanya menilai hal yang tercantum dalam tujuan pembelajaran.`},
+{cat:'Materi',title:'Menyederhanakan materi',desc:'Menyesuaikan bacaan atau penjelasan dengan tingkat kesiapan peserta didik.',text:`Anda berperan sebagai editor materi pembelajaran Bahasa Indonesia.
+
+Sederhanakan materi berikut untuk peserta didik kelas [kelas/fase] dengan karakteristik [karakteristik]. Target panjang maksimal [jumlah] kata.
+
+Pertahankan konsep dan istilah penting, gunakan kalimat yang jelas, beri contoh yang dekat dengan kehidupan peserta didik, dan tambahkan glosarium singkat untuk istilah sulit. Jangan mengubah fakta atau makna utama.
+
+Materi sumber:
+[tempel materi]
+
+Setelah menulis, periksa kembali keterbacaan dan ketepatan isinya.`},
+{cat:'LKPD',title:'Membuat LKPD',desc:'Lembar kerja yang selaras dengan tujuan dan bisa langsung digunakan.',text:`Anda berperan sebagai guru Bahasa Indonesia yang merancang LKPD.
+
+Buat LKPD untuk kelas [kelas/fase], materi [materi], dan tujuan [tujuan]. Kegiatan berlangsung [waktu] dengan [individu/kelompok] dan sarana [sarana].
+
+LKPD harus memuat judul, tujuan, petunjuk singkat, bahan/stimulus, langkah kegiatan, pertanyaan pemandu dari mudah ke menantang, ruang atau format jawaban, serta refleksi peserta didik.
+
+Gunakan bahasa yang sesuai usia. Jangan memasukkan kegiatan yang tidak mendukung tujuan. Periksa kembali apakah instruksi dapat dipahami tanpa penjelasan tambahan.`},
+{cat:'Audit & revisi',title:'Audit kesiapan modul',desc:'Mengecek apakah draf benar-benar siap dipakai mengajar.',text:`Bertindak sebagai guru yang akan menggunakan modul berikut besok pagi.
+
+Evaluasi apakah modul ini benar-benar dapat dilaksanakan di kelas [kelas] dengan [jumlah] peserta didik, waktu [waktu], dan sarana [sarana]. Periksa keselarasan tujuan, urutan aktivitas, kecukupan waktu, alat dan bahan, kejelasan instruksi, pengelolaan peserta didik, serta asesmen.
+
+Tandai bagian yang berpotensi sulit dilaksanakan. Untuk setiap masalah, jelaskan alasannya dan berikan alternatif yang lebih realistis tanpa mengubah tujuan utama.
+
+Draf modul:
+[tempel modul]`},
+{cat:'Audit & revisi',title:'Merampingkan kegiatan terlalu padat',desc:'Memilih aktivitas penting dan memperbaiki alokasi waktu.',text:`Rancangan pembelajaran berikut terlalu padat untuk alokasi [waktu].
+
+Tinjau seluruh kegiatan, pilih aktivitas yang paling penting, gabungkan atau hapus pengulangan, dan sederhanakan langkah tanpa mengurangi ketercapaian tujuan. Tampilkan versi revisi dalam tabel berisi tahap, aktivitas guru, aktivitas peserta didik, dan alokasi menit. Pastikan total waktunya tepat [waktu].
+
+Jelaskan singkat perubahan utama dan alasannya.
+
+Rancangan awal:
+[tempel rancangan]`},
+{cat:'Refleksi',title:'Membuat pertanyaan refleksi',desc:'Refleksi peserta didik dan guru yang menghasilkan tindak lanjut.',text:`Anda berperan sebagai guru Bahasa Indonesia yang sedang menutup pembelajaran tentang [materi] di kelas [kelas]. Tujuan pembelajaran: [tujuan].
+
+Buat 4 pertanyaan refleksi singkat untuk peserta didik yang menggali apa yang sudah dikuasai, bagian yang masih sulit, strategi belajar yang membantu, dan rencana perbaikan. Tambahkan 4 pertanyaan refleksi untuk guru tentang ketercapaian tujuan, partisipasi, efektivitas kegiatan, dan tindak lanjut.
+
+Gunakan bahasa yang spesifik dan mudah dijawab. Hindari pertanyaan umum yang hanya menghasilkan jawaban “ya/tidak”.`}
+];
+const bank=document.getElementById('bank'),search=document.getElementById('search'),filters=document.getElementById('filters'),count=document.getElementById('count'),empty=document.getElementById('empty');let active='Semua';
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+PROMPTS.forEach((p,i)=>{const el=document.createElement('article');el.className='card';el.dataset.cat=p.cat;el.dataset.search=(p.title+' '+p.desc+' '+p.cat+' '+p.text).toLowerCase();el.innerHTML=`<div class="top"><div><span class="tag">${esc(p.cat)}</span><h2>${esc(p.title)}</h2></div></div><p class="desc">${esc(p.desc)}</p><pre class="prompt" id="prompt-${i}">${esc(p.text)}</pre><div class="actions"><button class="copy" data-i="${i}" aria-describedby="prompt-${i}">Salin prompt</button><span class="hint">Sesuaikan bagian [seperti ini]</span></div>`;bank.appendChild(el)});
+['Semua',...new Set(PROMPTS.map(p=>p.cat))].forEach(cat=>{const b=document.createElement('button');b.className='filter'+(cat==='Semua'?' active':'');b.textContent=cat;b.dataset.cat=cat;b.setAttribute('aria-pressed',cat==='Semua');filters.appendChild(b)});
+function render(){const q=search.value.trim().toLowerCase();let n=0;document.querySelectorAll('.card').forEach(c=>{const show=(active==='Semua'||c.dataset.cat===active)&&(!q||c.dataset.search.includes(q));c.hidden=!show;if(show)n++});count.textContent=`${n} prompt tersedia`;empty.classList.toggle('show',n===0)}render();
+search.addEventListener('input',render);filters.addEventListener('click',e=>{if(!e.target.classList.contains('filter'))return;active=e.target.dataset.cat;document.querySelectorAll('.filter').forEach(b=>{const on=b===e.target;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});render()});
+bank.addEventListener('click',async e=>{const b=e.target.closest('.copy');if(!b)return;const text=PROMPTS[+b.dataset.i].text;try{await navigator.clipboard.writeText(text)}catch(err){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}const old=b.textContent;b.textContent='Tersalin ✓';b.classList.add('done');setTimeout(()=>{b.textContent=old;b.classList.remove('done')},1600)});
+</script>
+</body>
+</html>

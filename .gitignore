@@ -1,0 +1,15 @@
+# Sistem operasi dan editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# Log dan file lokal
+*.log
+.env
+.env.*
+!.env.example
+
