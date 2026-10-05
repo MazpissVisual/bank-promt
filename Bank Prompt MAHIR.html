@@ -27,7 +27,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 </head>
 <body>
 <div class="page">
-<nav class="site-nav" aria-label="Navigasi utama"><a href="Lembar%20Kerja%20Prompt%20MAHIR.html">Lembar latihan</a><a href="Bank%20Prompt%20MAHIR.html" aria-current="page">Bank prompt</a></nav>
+<nav class="site-nav" aria-label="Navigasi utama"><a href="/lembar-latihan">Lembar latihan</a><a href="/bank-promt" aria-current="page">Bank prompt</a></nav>
 <header><h1>Bank Prompt MAHIR</h1><p>Pilih prompt sesuai kebutuhan, salin, lalu ganti bagian dalam tanda <b>[kurung siku]</b> dengan kondisi kelas Anda. Prompt ini adalah titik awal—guru tetap meninjau hasil akhirnya.</p></header>
 <section class="toolbar" aria-label="Cari dan saring prompt"><input class="search" id="search" type="search" placeholder="Cari: tujuan, asesmen, diferensiasi…" autocomplete="off"><span class="count" id="count"></span><div class="filters" id="filters"></div></section>
 <main><div class="grid" id="bank"></div><div class="empty" id="empty">Prompt yang dicari belum ada. Coba kata kunci atau kategori lain.</div></main>
@@ -36,6 +36,31 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 </div>
 <script>
 const PROMPTS=[
+{cat:'RPM lengkap',title:'Menyusun RPM lengkap dan selaras',desc:'Menghasilkan Rancangan Pembelajaran Mendalam dengan pemeriksaan keselarasan otomatis.',text:`Anda berperan sebagai guru [mata pelajaran] [jenjang] yang berpengalaman menyusun Rancangan Pembelajaran Mendalam (RPM) sesuai kurikulum yang berlaku.
+
+DATA PEMBELAJARAN
+- Satuan pendidikan: [nama sekolah]
+- Mata pelajaran: [mata pelajaran]
+- Fase/kelas: [fase dan kelas]
+- Bab/topik: [bab atau topik]
+- Alokasi waktu: [jumlah JP dan menit]
+- Tahun ajaran: [tahun ajaran]
+- Capaian Pembelajaran/elemen CP: [tempel CP resmi]
+- Kondisi murid: [pengetahuan awal, minat, latar belakang, kebutuhan belajar, jumlah murid]
+- Sarana dan akses digital: [sarana yang tersedia]
+- Konteks lokal: [lingkungan atau permasalahan nyata yang relevan]
+
+Susun RPM lengkap dengan bagian:
+A. Identifikasi: kesiapan murid, karakteristik materi, relevansi, tingkat kesulitan, struktur materi, integrasi nilai/karakter, serta Dimensi Profil Lulusan beserta alasan pemilihannya.
+B. Desain Pembelajaran: CP, tujuan pembelajaran yang terukur, lintas disiplin, topik kontekstual, pendekatan, model, strategi, metode, kemitraan, lingkungan belajar, dan pemanfaatan digital.
+C. Pengalaman Belajar: kegiatan pendahuluan, memahami, mengaplikasi, merefleksi, dan penutup. Tulis aktivitas guru, aktivitas murid, prinsip mindful-meaningful-joyful, serta alokasi menit pada setiap tahap.
+D. Asesmen: diagnostik, formatif, dan sumatif beserta waktu, teknik, instrumen, indikator, rubrik/kriteria ketercapaian, dan tindak lanjut.
+E. Remedial dan pengayaan.
+F. Refleksi guru dan murid.
+
+Sajikan identitas dan komponen utama dalam tabel yang rapi. Gunakan bahasa Indonesia formal, jelas, operasional, dan siap digunakan guru. Pastikan total durasi tepat [alokasi waktu]. Jangan mengarang identitas, CP, fasilitas, atau data murid yang belum diberikan; tandai dengan [PERLU DIISI] dan ajukan maksimal 5 pertanyaan klarifikasi sebelum menyusun jika ada data penting yang kosong.
+
+Sebelum memberikan jawaban akhir, lakukan audit dan perbaiki ketidaksesuaian antara CP, tujuan pembelajaran, level kognitif, kegiatan, asesmen, Dimensi Profil Lulusan, kondisi murid, sarana, dan alokasi waktu.`},
 {cat:'Modul lengkap',title:'Menyusun modul ajar utuh',desc:'Menghasilkan rancangan lengkap yang tetap realistis untuk kondisi kelas.',text:`Anda berperan sebagai guru Bahasa Indonesia [jenjang] yang berpengalaman merancang pembelajaran.
 
 Saya mengajar kelas [kelas/fase] dengan [jumlah] peserta didik. Karakteristik kelas: [kemampuan, minat, atau kebutuhan belajar]. Materi: [materi]. Alokasi waktu: [waktu]. Sarana yang tersedia: [sarana].

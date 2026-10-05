@@ -1,0 +1,25 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/Lembar%20Kerja%20Prompt%20MAHIR.html",
+      "destination": "/lembar-latihan",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/latihan-menulis-prompt",
+      "destination": "/lembar-latihan-prompt.html"
+    },
+    {
+      "source": "/lembar-latihan",
+      "destination": "/Lembar%20Kerja%20Prompt%20MAHIR.html"
+    },
+    {
+      "source": "/bank-promt",
+      "destination": "/"
+    }
+  ]
+}
