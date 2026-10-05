@@ -65,19 +65,16 @@ Kemudian buka `http://localhost:8000`.
 └── README.md
 ```
 
-## Deployment dengan GitHub Pages
+## Deployment dengan Vercel
 
-1. Push proyek ke branch `main` pada repositori GitHub.
-2. Buka **Settings → Pages** di repositori.
-3. Pada **Build and deployment**, pilih **Deploy from a branch**.
-4. Pilih branch `main` dan folder `/ (root)`.
-5. Klik **Save** dan tunggu proses deployment selesai.
+1. Masuk ke [Vercel](https://vercel.com/) dan pilih **Add New → Project**.
+2. Impor repositori GitHub `MazpissVisual/bank-promt`.
+3. Pilih **Framework Preset: Other**.
+4. Biarkan **Root Directory** pada direktori utama proyek.
+5. Tidak diperlukan Build Command, Output Directory, atau environment variable.
+6. Klik **Deploy**.
 
-Setelah aktif, situs biasanya tersedia di:
-
-```text
-https://mazpissvisual.github.io/bank-promt/
-```
+Vercel akan menyajikan `index.html` sebagai halaman utama. Deployment berikutnya akan berjalan otomatis setiap kali ada commit baru pada branch `main`.
 
 ## Memperbarui daftar prompt
 
