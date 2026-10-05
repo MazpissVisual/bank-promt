@@ -62,7 +62,7 @@ button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .checks small{display:block;color:var(--soft)}
 details{margin-top:12px}
 summary{cursor:pointer;font-weight:700;color:var(--soft)}
-details pre{white-space:pre-wrap;font:.92rem/1.55 var(--body);background:var(--paper);border-left:3px solid var(--margin);padding:10px 14px;margin:8px 0 0}
+details pre{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;white-space:pre-wrap;font:.92rem/1.55 var(--body);background:var(--paper);border-left:3px solid var(--margin);padding:10px 14px;margin:8px 0 0}
 footer{color:var(--soft);font-size:.9rem;border-top:2px solid var(--line);padding-top:16px}
 /* ---- Bank prompt ---- */
 .site-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.site-nav a{font:700 .9rem var(--body);color:var(--ink);text-decoration:none;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px}.site-nav a[aria-current="page"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -205,6 +205,7 @@ function check(i,quiet){
   pct===1?passed.add(i):passed.delete(i);upd();
 }
 function upd(){document.getElementById('sc').textContent=`${passed.size} dari ${TASKS.length} tugas tuntas`;document.getElementById('scbar').style.width=(passed.size/TASKS.length*100)+'%'}
+['copy','cut','contextmenu','selectstart','dragstart'].forEach(ev=>wrap.addEventListener(ev,e=>{if(e.target.closest('details pre'))e.preventDefault()}));
 wrap.addEventListener('click',e=>{if(e.target.classList.contains('chk'))check(+e.target.dataset.i)});
 let dl=null;
 (async()=>{try{dl=await window.claude?.use?.('downloads')}catch(e){dl=null}document.querySelectorAll('.exp').forEach(b=>b.hidden=false)})();
