@@ -4,6 +4,9 @@
   "redirects": [
     { "source": "/lembar-latihan", "destination": "/", "permanent": false },
     { "source": "/latihan-menulis-prompt", "destination": "/", "permanent": false },
-    { "source": "/bank-promt", "destination": "/#bank", "permanent": false }
+    { "source": "/bank-promt", "destination": "/bank", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/bank", "destination": "/index.html" }
   ]
 }

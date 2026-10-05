@@ -81,11 +81,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 </head>
 <body>
 <div class="page">
-<nav class="site-nav" aria-label="Navigasi utama"><a href="#lembar" id="nav-lembar">Lembar latihan</a><a href="#bank" id="nav-bank">Bank prompt</a></nav>
+<nav class="site-nav" aria-label="Navigasi utama"><a href="/" id="nav-lembar" data-route>Lembar latihan</a><a href="/bank" id="nav-bank" data-route>Bank prompt</a></nav>
 <div id="panel-lembar">
 <header>
   <h1>Lembar Kerja Prompt MAHIR</h1>
-  <p>Tulis prompt untuk setiap kasus di bawah, lalu tekan <b>Periksa prompt</b>. Sistem akan menandai unsur yang sudah ada dan yang masih kurang. Revisi sampai semua centang hijau, baru bandingkan dengan contoh. Butuh prompt siap pakai? Buka <a href="#bank">Bank prompt</a>.</p>
+  <p>Tulis prompt untuk setiap kasus di bawah, lalu tekan <b>Periksa prompt</b>. Sistem akan menandai unsur yang sudah ada dan yang masih kurang. Revisi sampai semua centang hijau, baru bandingkan dengan contoh. Butuh prompt siap pakai? Buka <a href="/bank" data-route>Bank prompt</a>.</p>
   <div class="idrow">
     <label>Nama peserta<input id="nama" autocomplete="name"></label>
     <label>Asal sekolah<input id="sekolah"></label>
@@ -407,11 +407,14 @@ search.addEventListener('input',render);filters.addEventListener('click',e=>{if(
 bank.addEventListener('click',async e=>{const b=e.target.closest('.copy');if(!b)return;const text=PROMPTS[+b.dataset.i].text;try{await navigator.clipboard.writeText(text)}catch(err){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}const old=b.textContent;b.textContent='Tersalin ✓';b.classList.add('done');setTimeout(()=>{b.textContent=old;b.classList.remove('done')},1600)});
 })();
 const panels={lembar:document.getElementById('panel-lembar'),bank:document.getElementById('panel-bank')};
-function route(){const v=location.hash==='#bank'?'bank':'lembar';
+if(location.hash==='#bank')history.replaceState(null,'','/bank');else if(location.hash==='#lembar')history.replaceState(null,'','/');
+function route(){const v=location.pathname.replace(/\/$/,'')==='/bank'?'bank':'lembar';
   Object.entries(panels).forEach(([k,p])=>p.hidden=k!==v);
   ['lembar','bank'].forEach(k=>{const a=document.getElementById('nav-'+k);k===v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
   document.title=v==='bank'?'Bank Prompt MAHIR':'Lembar Kerja Prompt MAHIR';window.scrollTo(0,0)}
-addEventListener('hashchange',route);route();
+addEventListener('popstate',route);
+document.addEventListener('click',e=>{const a=e.target.closest('a[data-route]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;e.preventDefault();history.pushState(null,'',a.getAttribute('href'));route()});
+route();
 </script>
 </body>
 </html>
