@@ -217,8 +217,11 @@ function buildPdf(jsPDF,d){
   const para=(txt,{size=12,style='normal',indent=0,align='justify',lh=LH}={})=>{
     doc.setFont('times',style);doc.setFontSize(size);
     const lines=doc.splitTextToSize(clean(txt),W-indent);
-    lines.forEach((ln,k)=>{need(lh);const last=k===lines.length-1;
-      doc.text(ln,L+indent,y,{align:'left',maxWidth:W-indent,...(align==='justify'&&!last?{align:'justify'}:{})});y+=lh});
+    if(align!=='justify'){lines.forEach(ln=>{need(lh);doc.text(ln,L+indent,y);y+=lh});return}
+    // jsPDF hanya merenggangkan baris jika teks diberikan utuh (bukan per baris), jadi kirim per potongan halaman
+    let i=0;
+    while(i<lines.length){need(lh);const fit=Math.max(1,Math.floor((PH-B-y)/lh)+0),chunk=lines.slice(i,i+fit);
+      doc.text(chunk.join(' '),L+indent,y,{align:'justify',maxWidth:W-indent});y+=lh*chunk.length;i+=chunk.length}
   };
   const center=(txt,size,style)=>{doc.setFont('times',style);doc.setFontSize(size);doc.splitTextToSize(clean(txt),W).forEach(ln=>{need(LH);doc.text(ln,L+W/2,y,{align:'center'});y+=LH})};
   center('LAPORAN HASIL LATIHAN',14,'bold');
