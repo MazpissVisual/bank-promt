@@ -13,3 +13,6 @@ Desktop.ini
 .env.*
 !.env.example
 
+
+# File kunci sementara Word
+~$*

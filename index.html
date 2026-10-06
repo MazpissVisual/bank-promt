@@ -62,6 +62,7 @@ summary{cursor:pointer;font-weight:700;color:var(--soft)}
 details pre{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;white-space:pre-wrap;font:.92rem/1.55 var(--body);background:var(--paper);border-left:3px solid var(--margin);padding:10px 14px;margin:8px 0 0}
 footer{color:var(--soft);font-size:.9rem;border-top:2px solid var(--line);padding-top:16px}
 /* ---- Bank prompt ---- */
+.dl{display:inline-block;text-decoration:none}
 .site-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}.site-nav a{font:700 .9rem var(--body);color:var(--ink);text-decoration:none;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px}.site-nav a[aria-current="page"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .toolbar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--line);padding:10px 0 12px;margin-bottom:24px;display:grid;grid-template-columns:minmax(220px,1fr) auto;gap:10px}
 .search{width:100%;font:1rem var(--body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:9px;padding:10px 13px}.count{align-self:center;color:var(--soft);font-size:.9rem;white-space:nowrap}
@@ -78,7 +79,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 </head>
 <body>
 <div class="page">
-<nav class="site-nav" aria-label="Navigasi utama"><a href="/" id="nav-lembar" data-route>Lembar latihan</a><a href="/bank" id="nav-bank" data-route>Bank prompt</a></nav>
+<nav class="site-nav" aria-label="Navigasi utama"><a href="/" id="nav-lembar" data-route>Lembar latihan</a><a href="/bank" id="nav-bank" data-route>Bank prompt</a><a href="/unduhan" id="nav-unduhan" data-route>Unduhan</a></nav>
 <div id="panel-lembar">
 <header>
   <h1>Lembar Kerja Prompt MAHIR</h1>
@@ -104,6 +105,15 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 <section class="toolbar" aria-label="Cari dan saring prompt"><input class="search" id="search" type="search" placeholder="Cari: tujuan, asesmen, diferensiasi…" autocomplete="off" aria-label="Cari prompt"><span class="count" id="count" aria-live="polite"></span><div class="filters" id="filters"></div></section>
 <div class="grid" id="bank"></div><div class="empty" id="empty">Prompt yang dicari belum ada. Coba kata kunci atau kategori lain.</div>
 <p class="tip"><b>Tip MAHIR:</b> setelah menempelkan prompt ke AI, lengkapi konteks kelas dan selalu minta AI memeriksa kembali keselarasan tujuan, kegiatan, serta asesmen.</p>
+</div>
+<div id="panel-unduhan" hidden>
+<header class="bank-head"><h2>Unduhan</h2><p>Tiga file pendukung pelatihan. Gunakan <b>template</b> untuk menyusun RPM Anda, dan <b>contoh</b> sebagai pembanding hasil akhir.</p></header>
+<div class="grid">
+<article class="card"><span class="tag">Template · DOCX</span><h2>Template RPM (kosong)</h2><p class="desc">Kerangka Rancangan Pembelajaran Mendalam A sampai F dengan placeholder [kurung siku]. Tempat menempelkan hasil dari AI.</p><div class="actions"><a class="copy dl" href="/files/template-rpm-umum.docx" download>Unduh (12 KB)</a></div></article>
+<article class="card"><span class="tag">Contoh · DOCX</span><h2>Contoh RPM siap pakai</h2><p class="desc">RPM Bahasa Indonesia yang sudah terisi lengkap, sebagai gambaran hasil akhir yang ingin dicapai.</p><div class="actions"><a class="copy dl" href="/files/contoh-rpm-siap-jadi.docx" download>Unduh (16 KB)</a></div></article>
+<article class="card"><span class="tag">Latihan prompt · PDF</span><h2>Bank Prompt MAHIR</h2><p class="desc">Kumpulan prompt dengan kerangka MAHIR dalam bentuk PDF, untuk dibaca tanpa internet atau dicetak.</p><div class="actions"><a class="copy dl" href="/files/bank-prompt-mahir.pdf" download>Unduh (80 KB)</a></div></article>
+</div>
+<p class="tip"><b>Alur yang disarankan:</b> tulis prompt di lembar latihan, jalankan di AI pilihan Anda, lalu salin hasilnya per bagian ke template RPM. Periksa kembali sebelum dipakai mengajar.</p>
 </div>
 <footer>Gunakan AI sebagai asisten. Guru tetap menentukan tujuan, konteks, kelayakan, nilai, dan keputusan akhir pembelajaran.<br>Bank Prompt MAHIR · Havidz Muhammad Iqbal, S.Kom.</footer>
 </div>
@@ -408,12 +418,12 @@ function render(){const q=search.value.trim().toLowerCase();let n=0;document.que
 search.addEventListener('input',render);filters.addEventListener('click',e=>{if(!e.target.classList.contains('filter'))return;active=e.target.dataset.cat;document.querySelectorAll('.filter').forEach(b=>{const on=b===e.target;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on)});render()});
 bank.addEventListener('click',async e=>{const b=e.target.closest('.copy');if(!b)return;const text=PROMPTS[+b.dataset.i].text;try{await navigator.clipboard.writeText(text)}catch(err){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}const old=b.textContent;b.textContent='Tersalin ✓';b.classList.add('done');setTimeout(()=>{b.textContent=old;b.classList.remove('done')},1600)});
 })();
-const panels={lembar:document.getElementById('panel-lembar'),bank:document.getElementById('panel-bank')};
+const panels={lembar:document.getElementById('panel-lembar'),bank:document.getElementById('panel-bank'),unduhan:document.getElementById('panel-unduhan')};
 if(location.hash==='#bank')history.replaceState(null,'','/bank');else if(location.hash==='#lembar')history.replaceState(null,'','/');
-function route(){const v=location.pathname.replace(/\/$/,'')==='/bank'?'bank':'lembar';
+function route(){const pth=location.pathname.replace(/\/$/,''),v=pth==='/bank'?'bank':pth==='/unduhan'?'unduhan':'lembar';
   Object.entries(panels).forEach(([k,p])=>p.hidden=k!==v);
-  ['lembar','bank'].forEach(k=>{const a=document.getElementById('nav-'+k);k===v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
-  document.title=v==='bank'?'Bank Prompt MAHIR':'Lembar Kerja Prompt MAHIR';window.scrollTo(0,0)}
+  ['lembar','bank','unduhan'].forEach(k=>{const a=document.getElementById('nav-'+k);k===v?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current')});
+  document.title={bank:'Bank Prompt MAHIR',unduhan:'Unduhan MAHIR',lembar:'Lembar Kerja Prompt MAHIR'}[v];window.scrollTo(0,0)}
 addEventListener('popstate',route);
 document.addEventListener('click',e=>{const a=e.target.closest('a[data-route]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;e.preventDefault();history.pushState(null,'',a.getAttribute('href'));route()});
 route();

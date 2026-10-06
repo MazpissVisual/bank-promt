@@ -7,6 +7,7 @@
     { "source": "/bank-promt", "destination": "/bank", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/bank", "destination": "/index.html" }
+    { "source": "/bank", "destination": "/index.html" },
+    { "source": "/unduhan", "destination": "/index.html" }
   ]
 }
