@@ -50,16 +50,13 @@ textarea:focus,button:focus-visible,input:focus{outline:3px solid var(--margin);
 button{font:700 .95rem var(--body);border-radius:8px;padding:9px 16px;cursor:pointer;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper)}
 button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .wc{font-size:.85rem;color:var(--soft);margin-left:auto}
-.result{margin-top:16px;display:none}
-.result.show{display:block}
-.grade{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
-.grade span{font:600 2.4rem/1 var(--hand);color:var(--margin);transform:rotate(-4deg);display:inline-block}
-.grade em{font-style:normal;color:var(--soft)}
-.checks{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.checks li{padding:8px 12px;border-radius:6px;display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:.95rem}
-.checks li.ok{background:var(--okbg)}.checks li.no{background:var(--nobg)}
-.checks li .ic{font-weight:700}.checks li.ok .ic{color:var(--ok)}.checks li.no .ic{color:var(--no)}
-.checks small{display:block;color:var(--soft)}
+.rumus{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;margin-top:14px}
+.rumus summary{color:var(--ink)}
+.formula{margin:10px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-weight:700;color:var(--soft)}
+.formula b{font:800 1.15rem var(--head);background:var(--mark);color:#1F2A5C;border-radius:6px;padding:2px 10px}
+.rumus ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rumus li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:.95rem}
+.rumus li>b{font:800 1.1rem var(--head);color:var(--margin)}
 details{margin-top:12px}
 summary{cursor:pointer;font-weight:700;color:var(--soft)}
 details pre{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;white-space:pre-wrap;font:.92rem/1.55 var(--body);background:var(--paper);border-left:3px solid var(--margin);padding:10px 14px;margin:8px 0 0}
@@ -85,7 +82,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 <div id="panel-lembar">
 <header>
   <h1>Lembar Kerja Prompt MAHIR</h1>
-  <p>Tulis prompt untuk setiap kasus di bawah, lalu tekan <b>Periksa prompt</b>. Sistem akan menandai unsur yang sudah ada dan yang masih kurang. Revisi sampai semua centang hijau, baru bandingkan dengan contoh. Butuh prompt siap pakai? Buka <a href="/bank" data-route>Bank prompt</a>.</p>
+  <p>Tulis prompt untuk setiap kasus di bawah, lalu susun dengan rumus <b>M + A + H + I + R</b>. Setiap kasus punya tips singkat sebagai panduan. Setelah selesai, bandingkan dengan contoh prompt. Butuh prompt siap pakai? Buka <a href="/bank" data-route>Bank prompt</a>.</p>
   <div class="idrow">
     <label>Nama peserta<input id="nama" autocomplete="name"></label>
     <label>Asal sekolah<input id="sekolah"></label>
@@ -95,7 +92,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
   </ul>
 </header>
 
-<div class="score" aria-live="polite"><strong id="sc">0 dari 6 tugas tuntas</strong><div class="bar"><i id="scbar"></i></div><button class="exp" hidden>Unduh hasil (PDF)</button><button class="ghost" id="reset">Kosongkan semua</button><span id="expmsg" class="wc" style="margin:0"></span></div>
+<div class="score" aria-live="polite"><strong id="sc">0 dari 6 tugas terisi</strong><div class="bar"><i id="scbar"></i></div><button class="exp" hidden>Unduh hasil (PDF)</button><button class="ghost" id="reset">Kosongkan semua</button><span id="expmsg" class="wc" style="margin:0"></span></div>
 
 <main id="tasks"></main>
 
@@ -114,71 +111,88 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
-const has=(t,re)=>re.test(t);
-const countHits=(t,arr)=>arr.filter(r=>r.test(t)).length;
-const CTX=[/kelas\s*(x|xi|xii|\d)/i,/fase\s*[a-f]\b/i,/\d+\s*(peserta|siswa|murid|anak)/i,/(\d+\s*x\s*\d+\s*menit|\d+\s*menit|\d+\s*jp)/i,/(heterogen|beragam|karakteristik|minat|latar belakang)/i,/(laptop|proyektor|internet|wifi|hp|gawai|papan tulis|fasilitas|sarana)/i,/(sma|smk|smp|ma\b|mts)/i];
-const C={
-  peran:{label:'M — Peran untuk AI',hint:'Mulai dengan "Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman ...".',test:t=>has(t,/(berperan|bertindak|berlaku)\s+sebagai|anda\s+(adalah|sebagai)|kamu\s+(adalah|sebagai)|jadilah/i)},
-  konteks:{label:'A — Konteks kelas (min. 3 rincian)',hint:'Sebut jenjang/kelas, jumlah siswa, alokasi waktu, karakteristik siswa, atau sarana.',test:t=>countHits(t,CTX)>=3},
-  materi:{label:'A — Materi disebut jelas',hint:'Tulis nama materinya, misalnya "teks argumentasi" atau "teks eksposisi".',test:t=>has(t,/teks\s+\w+|puisi|cerpen|drama|novel|pidato|debat|hikayat|resensi|surat|iklan|negosiasi/i)},
-  hasil:{label:'H — Hasil yang diminta jelas',hint:'Pakai kata kerja output: susun, buat, rancang, rumuskan, berikan, evaluasi.',test:t=>has(t,/\b(susun|susunlah|buat|buatkan|buatlah|rancang|rumuskan|hasilkan|berikan|analisis|evaluasi|periksa|perbaiki|revisi|ubah)\b/i)},
-  batasan:{label:'I — Instruksi & batasan',hint:'Tambah batasan: "jangan ...", "hindari ...", "maksimal ...", "harus ...", atau format tabel.',test:t=>has(t,/\b(jangan|hindari|maksimal|minimal|paling banyak|harus|wajib|tanpa|batasi|format|tabel|skala)\b/i)},
-  review:{label:'R — Minta AI memeriksa ulang',hint:'Tutup dengan "Sebelum memberikan jawaban akhir, periksa kembali apakah ...".',test:t=>has(t,/(periksa|cek|tinjau|review|pastikan|evaluasi)\s+(kembali|ulang|lagi)|sebelum\s+(memberikan|menjawab|menyajikan)|pastikan/i)},
-  panjang:{label:'Prompt cukup rinci (min. 40 kata)',hint:'Prompt yang terlalu pendek membuat AI menebak-nebak.',test:t=>t.split(/\s+/).filter(Boolean).length>=40},
-  bersih:{label:'Tidak ada placeholder kosong',hint:'Masih ada [isi] atau [materi]. Ganti dengan data kelas yang sebenarnya.',test:t=>!has(t,/\[[^\]]*\]/)},
-};
-const k=(label,re,hint)=>({label,hint,test:t=>has(t,re)});
+const NAMES=["Masukkan peran","Atur konteks","Hasil yang diinginkan","Instruksi & batasan","Review & revisi"],LETTERS=["M","A","H","I","R"];
 const TASKS=[
- {title:'Prompt sekali tembak',kind:'CREATE · seluruh modul ajar',
-  kasus:'Anda mengajar kelas XI SMA, 32 siswa dengan kemampuan heterogen. Materi: teks argumentasi. Waktu 2 x 45 menit. Kelas punya laptop dan proyektor, internet terbatas. Tulis satu prompt utuh agar AI menyusun rancangan modul ajar lengkap.',
-  crit:[C.peran,C.konteks,C.materi,C.hasil,
-   k('Isi modul disebut (tujuan, kegiatan, asesmen, dll.)',/(?=.*tujuan)(?=.*(kegiatan|aktivitas|pendahuluan))(?=.*asesmen)/is,'Daftar komponen modul: tujuan, pendahuluan-inti-penutup, diferensiasi, asesmen, remedial, pengayaan, refleksi.'),
-   C.batasan,C.review,C.bersih],
-  contoh:'Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman merancang pembelajaran.\n\nSaya mengajar kelas XI dengan 32 peserta didik berkemampuan heterogen. Materi teks argumentasi, alokasi waktu 2 x 45 menit, di kelas dengan laptop, proyektor, dan internet terbatas.\n\nSusun rancangan modul ajar yang membantu peserta didik mengidentifikasi struktur dan kaidah kebahasaan teks argumentasi serta menghasilkan teks argumentasi sederhana.\n\nModul memuat identifikasi kebutuhan peserta didik, tujuan pembelajaran, materi, kegiatan pendahuluan-inti-penutup, diferensiasi, asesmen diagnostik-formatif-sumatif, remedial, pengayaan, dan refleksi. Gunakan aktivitas kolaboratif yang realistis untuk 2 x 45 menit. Jangan membuat aktivitas yang membutuhkan fasilitas di luar kondisi kelas.\n\nSebelum memberikan jawaban akhir, periksa kembali apakah setiap aktivitas selaras dengan tujuan, realistis terhadap waktu, sesuai karakteristik peserta didik, dan memiliki asesmen yang relevan.'},
- {title:'Merumuskan tujuan pembelajaran',kind:'CREATE · tujuan',
-  kasus:'Kelas X SMK, 30 siswa jurusan TKJ, materi teks eksposisi, 2 x 45 menit. Minta AI merumuskan tujuan pembelajaran yang spesifik dan terukur.',
-  crit:[C.peran,C.konteks,C.materi,
-   k('Minta tujuan spesifik & terukur',/(spesifik|terukur|dapat diamati|operasional)/i,'Tegaskan bahwa tujuan harus spesifik, terukur, dan dapat diamati.'),
-   k('Larang tujuan umum seperti "memahami"',/(hindari|jangan)[^.\n]*(umum|memahami|mengetahui)/i,'Tambahkan: "Hindari tujuan yang terlalu umum seperti memahami materi."'),
-   k('Batasi jumlah tujuan',/(maksimal|paling banyak|\d\s*-\s*\d|\d+)\s*(tujuan|butir)/i,'Misalnya "Buat maksimal 3-4 tujuan pembelajaran."'),C.bersih],
-  contoh:'Anda berperan sebagai guru Bahasa Indonesia SMK yang berpengalaman.\n\nKelas X TKJ, 30 peserta didik, materi teks eksposisi, alokasi 2 x 45 menit. Sebagian besar siswa lebih tertarik pada topik teknologi.\n\nSusun tujuan pembelajaran yang spesifik, terukur, dan dapat diamati. Setiap tujuan menunjukkan kemampuan yang dilakukan peserta didik, konteks materinya, tingkat proses berpikir, dan hasil yang dapat diamati.\n\nHindari tujuan yang terlalu umum seperti "memahami materi". Buat maksimal 3-4 tujuan.'},
- {title:'Menyusun diferensiasi',kind:'CREATE · diferensiasi',
-  kasus:'Kelas XI, 34 siswa. Sebagian sudah lancar menulis, sebagian masih kesulitan menyusun paragraf. Materi teks negosiasi. Minta strategi diferensiasi yang realistis.',
-  crit:[C.peran,C.konteks,C.materi,
-   k('Menyebut konten, proses, dan produk',/(?=.*konten)(?=.*proses)(?=.*produk)/is,'Minta tiga jenis diferensiasi: konten, proses, produk.'),
-   k('Ada scaffolding / dukungan',/(scaffold|perancah|dukungan|bantuan)/i,'Minta bentuk dukungan bagi siswa yang membutuhkan.'),
-   k('Larang label "pintar/lemah"',/(jangan|hindari)[^.\n]*(label|pintar|lemah|bodoh)/i,'Tambahkan: "Jangan membedakan berdasarkan label pintar dan lemah; fokus pada kebutuhan belajar."'),C.bersih],
-  contoh:'Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman menerapkan pembelajaran berdiferensiasi.\n\nKelas XI, 34 peserta didik. Sebagian sudah lancar menulis, sebagian masih kesulitan menyusun paragraf. Materi teks negosiasi, 2 x 45 menit.\n\nSusun strategi diferensiasi yang realistis berupa diferensiasi konten, proses, produk, serta scaffolding bagi peserta didik yang membutuhkan.\n\nJangan membedakan peserta didik berdasarkan label "pintar" dan "lemah". Fokus pada kebutuhan belajar.'},
- {title:'Asesmen sumatif dengan rubrik',kind:'CREATE · asesmen',
-  kasus:'Tujuan: siswa kelas XII mampu menulis surat lamaran pekerjaan sesuai struktur dan kaidah kebahasaan. Minta AI membuat asesmen sumatif lengkap dengan rubrik.',
-  crit:[C.peran,C.materi,
-   k('Menempelkan tujuan yang diukur',/tujuan/i,'Sertakan tujuan pembelajaran yang ingin diukur di dalam prompt.'),
-   k('Minta rubrik dengan skala',/rubrik/i,'Minta rubrik, misalnya skala 1-4.'),
-   k('Skala rubrik ditentukan',/skala\s*\d|\d\s*-\s*4|1\s*(sampai|hingga)\s*4/i,'Tentukan skala, misalnya "skala 1-4".'),
-   k('Minta indikator & kriteria keberhasilan',/(indikator|kriteria)/i,'Minta indikator penilaian dan kriteria keberhasilan.'),C.hasil,C.bersih],
-  contoh:'Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman menyusun asesmen.\n\nSusun asesmen sumatif untuk tujuan berikut: peserta didik kelas XII mampu menulis surat lamaran pekerjaan sesuai struktur dan kaidah kebahasaan.\n\nBuat tugas peserta didik, indikator penilaian, rubrik sederhana skala 1-4, dan kriteria keberhasilan. Sajikan rubrik dalam format tabel.'},
- {title:'Audit: siap dipakai besok pagi?',kind:'CHECK · classroom-ready',
-  kasus:'AI sudah memberi Anda draf modul. Tulis prompt yang meminta AI mengauditnya dari sudut pandang guru yang akan mengajar besok pagi (anggap draf modul ditempel di bawah prompt).',
-  crit:[C.peran,
-   k('Sudut pandang guru pemakai',/(besok|akan (menggunakan|mengajar)|guru yang akan)/i,'Contoh: "Bertindak sebagai guru yang akan menggunakan modul ini besok pagi."'),
-   k('Cek waktu',/waktu|menit|durasi/i,'Minta AI memeriksa kecukupan waktu.'),
-   k('Cek alat & bahan',/(alat|bahan|fasilitas|media|sarana)/i,'Minta AI memeriksa alat dan bahan.'),
-   k('Cek pengelolaan siswa & instruksi',/(pengelolaan|kelola|instruksi)/i,'Minta AI memeriksa pengelolaan siswa dan kejelasan instruksi.'),
-   k('Minta tandai + alternatif',/(tandai|identifikasi)[\s\S]*(alternatif|saran|solusi)/i,'Minta AI menandai bagian bermasalah lalu memberi alternatif yang lebih realistis.')],
-  contoh:'Bertindak sebagai guru yang akan menggunakan modul berikut besok pagi.\n\nEvaluasi apakah modul ini benar-benar dapat dilaksanakan di kelas. Periksa waktu, jumlah aktivitas, alat dan bahan, pengelolaan siswa, instruksi, dan asesmen.\n\nTandai bagian yang berpotensi sulit dilaksanakan dan berikan alternatif yang lebih realistis.\n\n[tempel modul]'},
- {title:'Revisi: kegiatan terlalu padat',kind:'IMPROVE · waktu',
-  kasus:'Draf modul dari AI berisi 7 kegiatan untuk 2 x 45 menit. Tulis prompt revisi agar AI merampingkannya.',
-  crit:[
-   k('Menyebut masalahnya',/(terlalu (banyak|padat)|tidak cukup|melebihi)/i,'Jelaskan masalahnya: aktivitas terlalu banyak untuk waktu yang ada.'),
-   k('Menyebut alokasi waktu',/(\d+\s*x\s*\d+\s*menit|\d+\s*menit|\d+\s*jp)/i,'Tulis alokasi waktunya, misalnya 2 x 45 menit.'),
-   k('Minta prioritas',/(prioritas|utamakan|pilih yang paling)/i,'Minta AI memprioritaskan aktivitas yang paling penting.'),
-   k('Jaga ketercapaian tujuan',/tujuan/i,'Tambahkan: "tanpa mengurangi ketercapaian tujuan".'),
-   k('Minta pembagian menit',/(rincian|pembagian|alokasi)[^.\n]*(menit|waktu)|per kegiatan/i,'Minta rincian menit per kegiatan supaya bisa dicek.')],
-  contoh:'Rancangan berikut terlalu banyak untuk alokasi 2 x 45 menit. Prioritaskan aktivitas yang paling penting dan sederhanakan langkah tanpa mengurangi ketercapaian tujuan. Tampilkan rincian alokasi menit per kegiatan.'}
+ {
+  "title": "Prompt sekali tembak",
+  "kind": "CREATE · seluruh modul ajar",
+  "kasus": "Anda mengajar kelas XI SMA, 32 siswa dengan kemampuan heterogen. Materi: teks argumentasi. Waktu 2 x 45 menit. Kelas punya laptop dan proyektor, internet terbatas. Tulis satu prompt utuh agar AI menyusun rancangan modul ajar lengkap.",
+  "tips": [
+   "Beri AI peran yang spesifik: mata pelajaran dan jenjang.",
+   "Tuliskan data kelas apa adanya: jenjang, jumlah siswa, karakteristik, materi, waktu, dan sarana.",
+   "Sebut hasil yang diminta beserta bagian-bagiannya, bukan sekadar \"buatkan modul\".",
+   "Tambahkan batasan agar hasilnya realistis untuk kondisi kelas Anda.",
+   "Tutup dengan perintah agar AI memeriksa keselarasan hasilnya sebelum menjawab."
+  ],
+  "contoh": "Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman merancang pembelajaran.\n\nSaya mengajar kelas XI dengan 32 peserta didik berkemampuan heterogen. Materi teks argumentasi, alokasi waktu 2 x 45 menit, di kelas dengan laptop, proyektor, dan internet terbatas.\n\nSusun rancangan modul ajar yang membantu peserta didik mengidentifikasi struktur dan kaidah kebahasaan teks argumentasi serta menghasilkan teks argumentasi sederhana.\n\nModul memuat identifikasi kebutuhan peserta didik, tujuan pembelajaran, materi, kegiatan pendahuluan-inti-penutup, diferensiasi, asesmen diagnostik-formatif-sumatif, remedial, pengayaan, dan refleksi. Gunakan aktivitas kolaboratif yang realistis untuk 2 x 45 menit. Jangan membuat aktivitas yang membutuhkan fasilitas di luar kondisi kelas.\n\nSebelum memberikan jawaban akhir, periksa kembali apakah setiap aktivitas selaras dengan tujuan, realistis terhadap waktu, sesuai karakteristik peserta didik, dan memiliki asesmen yang relevan."
+ },
+ {
+  "title": "Merumuskan tujuan pembelajaran",
+  "kind": "CREATE · tujuan",
+  "kasus": "Kelas X SMK, 30 siswa jurusan TKJ, materi teks eksposisi, 2 x 45 menit. Minta AI merumuskan tujuan pembelajaran yang spesifik dan terukur.",
+  "tips": [
+   "Beri AI peran guru sesuai mata pelajaran dan jenjang.",
+   "Sebut kelas, jumlah siswa, materi, waktu, dan karakteristik atau minat siswa.",
+   "Minta rumusan tujuan, lalu jelaskan ciri tujuan yang baik menurut Anda.",
+   "Batasi jumlah tujuan dan larang rumusan yang terlalu umum.",
+   "Minta AI memastikan tujuan bisa dicapai dalam waktu yang tersedia."
+  ],
+  "contoh": "Anda berperan sebagai guru Bahasa Indonesia SMK yang berpengalaman.\n\nKelas X TKJ, 30 peserta didik, materi teks eksposisi, alokasi 2 x 45 menit. Sebagian besar siswa lebih tertarik pada topik teknologi.\n\nSusun tujuan pembelajaran yang spesifik, terukur, dan dapat diamati. Setiap tujuan menunjukkan kemampuan yang dilakukan peserta didik, konteks materinya, tingkat proses berpikir, dan hasil yang dapat diamati.\n\nHindari tujuan yang terlalu umum seperti \"memahami materi\". Buat maksimal 3-4 tujuan."
+ },
+ {
+  "title": "Menyusun diferensiasi",
+  "kind": "CREATE · diferensiasi",
+  "kasus": "Kelas XI, 34 siswa. Sebagian sudah lancar menulis, sebagian masih kesulitan menyusun paragraf. Materi teks negosiasi. Minta strategi diferensiasi yang realistis.",
+  "tips": [
+   "Beri AI peran guru yang berpengalaman dalam pembelajaran berdiferensiasi.",
+   "Gambarkan keragaman kelas: berapa siswa, apa bedanya, materi apa, waktu berapa.",
+   "Minta strategi yang mencakup jenis-jenis diferensiasi dan bentuk dukungan untuk siswa.",
+   "Atur cara AI menyebut perbedaan siswa: fokus pada kebutuhan, bukan label.",
+   "Minta AI memeriksa bahwa strategi realistis untuk satu kelas dan waktu yang ada."
+  ],
+  "contoh": "Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman menerapkan pembelajaran berdiferensiasi.\n\nKelas XI, 34 peserta didik. Sebagian sudah lancar menulis, sebagian masih kesulitan menyusun paragraf. Materi teks negosiasi, 2 x 45 menit.\n\nSusun strategi diferensiasi yang realistis berupa diferensiasi konten, proses, produk, serta scaffolding bagi peserta didik yang membutuhkan.\n\nJangan membedakan peserta didik berdasarkan label \"pintar\" dan \"lemah\". Fokus pada kebutuhan belajar."
+ },
+ {
+  "title": "Asesmen sumatif dengan rubrik",
+  "kind": "CREATE · asesmen",
+  "kasus": "Tujuan: siswa kelas XII mampu menulis surat lamaran pekerjaan sesuai struktur dan kaidah kebahasaan. Minta AI membuat asesmen sumatif lengkap dengan rubrik.",
+  "tips": [
+   "Beri AI peran guru yang berpengalaman menyusun asesmen.",
+   "Tempelkan tujuan yang ingin diukur, lengkap dengan materi dan kelasnya.",
+   "Sebutkan komponen asesmen yang diminta, termasuk rubrik.",
+   "Tentukan format dan skala rubrik agar hasilnya langsung bisa dipakai.",
+   "Minta AI memeriksa bahwa rubrik hanya menilai hal yang ada pada tujuan."
+  ],
+  "contoh": "Anda berperan sebagai guru Bahasa Indonesia SMA yang berpengalaman menyusun asesmen.\n\nSusun asesmen sumatif untuk tujuan berikut: peserta didik kelas XII mampu menulis surat lamaran pekerjaan sesuai struktur dan kaidah kebahasaan.\n\nBuat tugas peserta didik, indikator penilaian, rubrik sederhana skala 1-4, dan kriteria keberhasilan. Sajikan rubrik dalam format tabel."
+ },
+ {
+  "title": "Audit: siap dipakai besok pagi?",
+  "kind": "CHECK · classroom-ready",
+  "kasus": "AI sudah memberi Anda draf modul. Tulis prompt yang meminta AI mengauditnya dari sudut pandang guru yang akan mengajar besok pagi (anggap draf modul ditempel di bawah prompt).",
+  "tips": [
+   "Minta AI bertindak dari sudut pandang guru yang benar-benar akan mengajar besok.",
+   "Sampaikan kondisi kelas dan tempelkan draf modul yang akan diperiksa.",
+   "Minta penilaian apakah modul bisa dilaksanakan, bukan hanya bagus di atas kertas.",
+   "Sebutkan aspek yang harus diperiksa, lalu minta bagian bermasalah ditandai beserta alternatifnya.",
+   "Minta alternatif yang diberikan tidak mengubah tujuan utama pembelajaran."
+  ],
+  "contoh": "Bertindak sebagai guru yang akan menggunakan modul berikut besok pagi.\n\nEvaluasi apakah modul ini benar-benar dapat dilaksanakan di kelas. Periksa waktu, jumlah aktivitas, alat dan bahan, pengelolaan siswa, instruksi, dan asesmen.\n\nTandai bagian yang berpotensi sulit dilaksanakan dan berikan alternatif yang lebih realistis.\n\n[tempel modul]"
+ },
+ {
+  "title": "Revisi: kegiatan terlalu padat",
+  "kind": "IMPROVE · waktu",
+  "kasus": "Draf modul dari AI berisi 7 kegiatan untuk 2 x 45 menit. Tulis prompt revisi agar AI merampingkannya.",
+  "tips": [
+   "Peran boleh singkat; yang penting AI tahu ia sedang merevisi, bukan membuat baru.",
+   "Jelaskan masalahnya dan sebut alokasi waktu yang tersedia.",
+   "Minta versi yang lebih ramping, dengan rincian waktu yang bisa Anda cek.",
+   "Minta AI memilih yang paling penting, tanpa mengorbankan tujuan pembelajaran.",
+   "Minta AI memastikan total waktu hasil revisi sesuai alokasi."
+  ],
+  "contoh": "Rancangan berikut terlalu banyak untuk alokasi 2 x 45 menit. Prioritaskan aktivitas yang paling penting dan sederhanakan langkah tanpa mengurangi ketercapaian tujuan. Tampilkan rincian alokasi menit per kegiatan."
+ }
 ];
-
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const passed=new Set();
 const wrap=document.getElementById('tasks');
 TASKS.forEach((t,i)=>{
   const el=document.createElement('section');el.className='task';el.id='t'+i;
@@ -186,27 +200,17 @@ TASKS.forEach((t,i)=>{
   <div class="case"><p><b>Kasus.</b> ${t.kasus}</p></div>
   <label for="ta${i}" class="sr">Prompt tugas ${i+1}</label>
   <textarea id="ta${i}" placeholder="Tulis prompt Anda di sini..."></textarea>
-  <div class="tools"><button data-i="${i}" class="chk">Periksa prompt</button><span class="wc" id="wc${i}">0 kata</span></div>
-  <div class="result" id="r${i}" aria-live="polite"></div>
+  <div class="tools"><span class="wc" id="wc${i}">0 kata</span></div>
+  <details class="rumus" open><summary>Rumus &amp; tips MAHIR</summary><p class="formula" aria-label="Rumus">${LETTERS.map(l=>`<b>${l}</b>`).join(" + ")}</p><ol>${t.tips.map((tp,k)=>`<li><b>${LETTERS[k]}</b><span><strong>${NAMES[k]}.</strong> ${tp}</span></li>`).join("")}</ol></details>
   <details><summary>Lihat contoh prompt</summary><pre>${t.contoh.replace(/</g,'&lt;')}</pre></details>`;
   wrap.appendChild(el);
   const ta=el.querySelector('textarea');ta.value=store.get('mahir-ta'+i)||'';
   const wc=()=>{el.querySelector('#wc'+i).textContent=ta.value.split(/\s+/).filter(Boolean).length+' kata'};wc();
-  ta.addEventListener('input',()=>{store.set('mahir-ta'+i,ta.value);wc()});
-  if(ta.value.trim())check(i,true);
+  ta.addEventListener('input',()=>{store.set('mahir-ta'+i,ta.value);wc();upd()});
 });
-function check(i,quiet){
-  const t=TASKS[i],txt=document.getElementById('ta'+i).value.trim(),r=document.getElementById('r'+i);
-  if(!txt){r.className='result show';r.innerHTML='<p>Kotak masih kosong. Tulis prompt Anda dulu, lalu periksa lagi.</p>';return}
-  const res=t.crit.map(c=>({c,ok:c.test(txt)}));const n=res.filter(x=>x.ok).length,tot=res.length;
-  const pct=n/tot;const nilai=pct===1?'Mantap!':pct>=.75?'Hampir!':pct>=.5?'Lanjut revisi':'Perlu banyak revisi';
-  r.className='result show';
-  r.innerHTML=`<div class="grade"><span>${n}/${tot}</span><em>${nilai}</em></div><ul class="checks">${res.map(x=>`<li class="${x.ok?'ok':'no'}"><span class="ic">${x.ok?'✓':'✗'}</span><span>${x.c.label}${x.ok?'':`<small>${x.c.hint}</small>`}</span></li>`).join('')}</ul>`;
-  pct===1?passed.add(i):passed.delete(i);upd();
-}
-function upd(){document.getElementById('sc').textContent=`${passed.size} dari ${TASKS.length} tugas tuntas`;document.getElementById('scbar').style.width=(passed.size/TASKS.length*100)+'%'}
+function upd(){const n=TASKS.filter((_,i)=>document.getElementById('ta'+i).value.trim()).length;document.getElementById('sc').textContent=`${n} dari ${TASKS.length} tugas terisi`;document.getElementById('scbar').style.width=(n/TASKS.length*100)+'%'}
+upd();
 ['copy','cut','contextmenu','selectstart','dragstart'].forEach(ev=>wrap.addEventListener(ev,e=>{if(e.target.closest('details pre'))e.preventDefault()}));
-wrap.addEventListener('click',e=>{if(e.target.classList.contains('chk'))check(+e.target.dataset.i)});
 let dl=null;
 (async()=>{try{dl=await window.claude?.use?.('downloads')}catch(e){dl=null}document.querySelectorAll('.exp').forEach(b=>b.hidden=false)})();
 function buildPdf(jsPDF,d){
@@ -236,25 +240,22 @@ function buildPdf(jsPDF,d){
   const table=(opts)=>{doc.autoTable({startY:y,margin:{left:L,right:R,top:T,bottom:B},theme:'grid',
     styles:{font:'times',fontSize:11,cellPadding:1.8,textColor:20,lineColor:60,lineWidth:0.2,valign:'top'},
     headStyles:{fillColor:[230,230,230],textColor:20,fontStyle:'bold',halign:'center'},...opts});y=doc.lastAutoTable.finalY+6};
-  head('A. Ringkasan Hasil');
-  para(`Peserta menyelesaikan ${d.tuntas} dari ${d.tasks.length} tugas latihan dengan seluruh kriteria terpenuhi, dengan total ${d.total} dari ${d.max} kriteria terpenuhi (${Math.round(d.total/d.max*100)}%). Rincian per tugas disajikan pada Tabel 1.`);
-  y+=2;need(LH*2);doc.setFont('times','bold');doc.setFontSize(11);doc.text('Tabel 1. Rekapitulasi Hasil Latihan',L+W/2,y,{align:'center'});y+=3;
-  table({head:[['No.','Tugas Latihan','Jenis','Skor','Status']],
-    body:d.tasks.map((t,i)=>[i+1,clean(t.title),clean(t.kind),`${t.n}/${t.max}`,t.n===t.max?'Tuntas':'Belum tuntas']),
-    columnStyles:{0:{halign:'center',cellWidth:11},3:{halign:'center',cellWidth:16},4:{halign:'center',cellWidth:26}}});
+  head('A. Ringkasan');
+  para(`Peserta menuliskan prompt untuk ${d.terisi} dari ${d.tasks.length} tugas latihan. Rincian per tugas disajikan pada Tabel 1.`);
+  y+=2;need(LH*2);doc.setFont('times','bold');doc.setFontSize(11);doc.text('Tabel 1. Rekapitulasi Latihan',L+W/2,y,{align:'center'});y+=3;
+  table({head:[['No.','Tugas Latihan','Jenis','Jumlah Kata','Status']],
+    body:d.tasks.map((t,i)=>[i+1,clean(t.title),clean(t.kind),t.kata,t.prompt?'Terisi':'Belum diisi']),
+    columnStyles:{0:{halign:'center',cellWidth:11},3:{halign:'center',cellWidth:24},4:{halign:'center',cellWidth:24}}});
   head('B. Rincian Tiap Tugas');
   d.tasks.forEach((t,i)=>{
     need(LH*4);doc.setFont('times','bold');doc.setFontSize(12);doc.text(`${i+1}. ${clean(t.title)}`,L,y);y+=LH;
     doc.setFont('times','bold');doc.text('a. Kasus',L+6,y);y+=LH;para(t.kasus,{indent:11});
     need(LH*2);doc.setFont('times','bold');doc.setFontSize(12);doc.text('b. Prompt yang ditulis peserta',L+6,y);y+=LH;
     if(t.prompt){t.prompt.split(/\n+/).forEach(p=>para(p,{indent:11,size:11,lh:5.2,align:'left'}))}else para('(Belum diisi)',{indent:11,style:'italic'});
-    y+=1;need(LH*3);doc.setFont('times','bold');doc.setFontSize(12);doc.text('c. Hasil pemeriksaan',L+6,y);y+=3;
-    table({margin:{left:L+11,right:R,top:T,bottom:B},head:[['No.','Kriteria','Status','Catatan Perbaikan']],
-      body:t.res.map((r,k)=>[k+1,clean(r.label),r.ok?'Terpenuhi':'Belum',r.ok?'-':clean(r.hint)]),
-      columnStyles:{0:{halign:'center',cellWidth:10},1:{cellWidth:42},2:{halign:'center',cellWidth:20}}});
+    y+=3;
   });
   head('C. Catatan');
-  para('Pemeriksaan dilakukan secara otomatis berdasarkan keberadaan unsur kerangka MAHIR (Masukkan peran, Atur konteks, Hasil yang diinginkan, Instruksi dan batasan, Review dan revisi) dalam prompt. Status "Terpenuhi" menunjukkan unsur telah ada, belum menilai kualitas hasil yang diberikan AI. Guru tetap menentukan tujuan, konteks, kelayakan, nilai, dan keputusan akhir pembelajaran.');
+  para('Laporan ini merekam prompt yang ditulis peserta berdasarkan kerangka MAHIR (Masukkan peran, Atur konteks, Hasil yang diinginkan, Instruksi dan batasan, Review dan revisi). Laporan tidak menilai kualitas prompt maupun hasil yang diberikan AI. Guru tetap menentukan tujuan, konteks, kelayakan, nilai, dan keputusan akhir pembelajaran.');
   const n=doc.getNumberOfPages();
   for(let p=1;p<=n;p++){doc.setPage(p);doc.setFont('times','italic');doc.setFontSize(9);doc.setTextColor(90);
     doc.text('Bank Prompt MAHIR - Lembar Kerja Peserta',L,PH-15);doc.text(`Halaman ${p} dari ${n}`,L+W,PH-15,{align:'right'});doc.setTextColor(0)}
@@ -264,11 +265,8 @@ function buildPdf(jsPDF,d){
 
 function collect(){
   const tgl=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
-  let total=0,max=0,tuntas=0;
-  const tasks=TASKS.map((t,i)=>{const txt=document.getElementById('ta'+i).value.trim();
-    const res=t.crit.map(c=>({label:c.label,hint:c.hint,ok:!!txt&&c.test(txt)}));const n=res.filter(x=>x.ok).length;
-    total+=n;max+=res.length;if(n===res.length)tuntas++;return{title:t.title,kind:t.kind,kasus:t.kasus,prompt:txt,res,n,max:res.length}});
-  return{nama:document.getElementById('nama').value.trim()||'-',sekolah:document.getElementById('sekolah').value.trim()||'-',tanggal:tgl,tasks,tuntas,total,max};
+  const tasks=TASKS.map((t,i)=>{const txt=document.getElementById('ta'+i).value.trim();return{title:t.title,kind:t.kind,kasus:t.kasus,prompt:txt,kata:txt.split(/\s+/).filter(Boolean).length}});
+  return{nama:document.getElementById('nama').value.trim()||'-',sekolah:document.getElementById('sekolah').value.trim()||'-',tanggal:tgl,tasks,terisi:tasks.filter(t=>t.prompt).length};
 }
 async function exportReport(btn){
   const msg=document.getElementById('expmsg');
@@ -284,7 +282,7 @@ async function exportReport(btn){
 }
 document.querySelectorAll('.exp').forEach(b=>b.onclick=()=>exportReport(b));
 ['nama','sekolah'].forEach(id=>{const f=document.getElementById(id);f.value=store.get('mahir-'+id)||'';f.addEventListener('input',()=>store.set('mahir-'+id,f.value))});
-document.getElementById('reset').onclick=()=>{if(!confirm('Kosongkan semua jawaban?'))return;TASKS.forEach((_,i)=>{document.getElementById('ta'+i).value='';store.set('mahir-ta'+i,'');document.getElementById('r'+i).className='result';document.getElementById('wc'+i).textContent='0 kata'});passed.clear();upd()};
+document.getElementById('reset').onclick=()=>{if(!confirm('Kosongkan semua jawaban?'))return;TASKS.forEach((_,i)=>{document.getElementById('ta'+i).value='';store.set('mahir-ta'+i,'');document.getElementById('wc'+i).textContent='0 kata'});upd()};
 
 (()=>{
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
